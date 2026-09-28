@@ -85,7 +85,7 @@ export function registerThreadTools(server: McpServer, source: ClientSource): vo
           .describe(
             "Ask T3 to create a fresh worktree for this thread. Mutually exclusive with worktreePath.",
           ),
-        runtimeMode: runtimeModeSchema.optional().describe("Default full-access"),
+        runtimeMode: runtimeModeSchema.optional().describe("Default auto"),
         interactionMode: interactionModeSchema
           .optional()
           .describe("Default 'default'; 'plan' asks for a plan first"),
@@ -150,7 +150,7 @@ export function registerThreadTools(server: McpServer, source: ClientSource): vo
           projectId: project.id,
           title: input.title,
           modelSelection: { instanceId: harness.instanceId, model: model.slug },
-          runtimeMode: input.runtimeMode ?? "full-access",
+          runtimeMode: input.runtimeMode ?? "auto",
           interactionMode: input.interactionMode ?? "default",
           ...choice,
           text,

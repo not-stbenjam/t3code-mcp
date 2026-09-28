@@ -312,7 +312,7 @@ describe("t3_create_thread", () => {
       commandId: ids.commandId,
       messageId: ids.messageId,
       modelSelection: { instanceId: "testHarness", model: "model-large" },
-      runtimeMode: "full-access",
+      runtimeMode: "auto",
       interactionMode: "default",
       branch: "main",
       worktreePath: null,
