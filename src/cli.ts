@@ -108,11 +108,11 @@ async function status(): Promise<void> {
   console.log(
     `Server: ${server.origin} (v${server.serverVersion ?? "?"}, ${server.label ?? "unlabeled"}) via ${server.source}`,
   );
+  let connection: Awaited<ReturnType<typeof connectToT3>> | undefined;
   try {
-    const connection = await connectToT3();
+    connection = await connectToT3();
     const client = new T3Client(connection);
     const [shell, config] = await Promise.all([client.shell(), client.config()]);
-    connection.rpc.close();
     console.log(`Token: ok (${connection.tokenSource})`);
     console.log(
       `Projects: ${shell.projects.length}, threads: ${shell.threads.length}, harnesses: ${config.providers.map((p) => p.instanceId).join(", ")}`,
@@ -120,6 +120,9 @@ async function status(): Promise<void> {
   } catch (error) {
     console.log(`Token: ${error instanceof Error ? error.message : String(error)}`);
     process.exitCode = 1;
+  } finally {
+    // An open socket keeps the process alive.
+    connection?.rpc.close();
   }
 }
 
