@@ -196,6 +196,20 @@ describe("waitForTurn", () => {
     expect(result.thread.latestTurn?.state).toBe("queued");
     expect(result.thread.messages[0]?.role).toBe("tool");
   });
+
+  it.each([[[{ id: "effort", value: "max" }]], [{ effort: "max" }]])(
+    "accepts model options in the array and legacy object shapes (%j)",
+    async (options) => {
+      const valid = snapshot(turn("A", "completed", "a1"), []);
+      const withOptions = {
+        ...valid,
+        thread: { ...valid.thread, modelSelection: { ...valid.thread.modelSelection, options } },
+      };
+      const fake = fakeConnection([withOptions], []);
+      const result = await new T3Client(fake.conn).thread("t1");
+      expect(result.thread.modelSelection.options).toEqual(options);
+    },
+  );
 });
 
 describe("commands", () => {
